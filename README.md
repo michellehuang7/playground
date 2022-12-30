@@ -1,0 +1,2 @@
+# playground
+simple OO practices
