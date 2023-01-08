@@ -1,11 +1,3 @@
-class Room:
-    def __init__(self, name, desc, paths=[], objs=[]):
-        self.name = name
-        self.desc = desc
-        self.paths = paths
-        self.objs = objs
-
-
 class Player:
     def __init__(self, room):
         self.objects = []
@@ -13,8 +5,8 @@ class Player:
 
     def pick_up(self, obj):
         try:
-            self.current_location.objs.remove(obj)
-        except (IndexError, ValueError):
+            self.current_location['objs'].remove(obj)
+        except ValueError:
             raise ValueError("You cannot get that.")
         self.objects.append(obj)
 
@@ -22,15 +14,15 @@ class Player:
         return f"Items - {'.'.join([obj for obj in self.objects])}"
 
     def look(self):
-        res = f"{self.current_location.desc} \n"
-        for p in self.current_location.paths:
+        res = f"{self.current_location['desc']} \n"
+        for p in self.current_location['paths']:
             res = res + f"There is a {p['method']} going {p['direction']} from here. \n"
-        for obj in self.current_location.objs:
+        for obj in self.current_location['objs']:
             res = res + f"You see a {obj} on the floor. \n"
         return res
 
     def walk(self, direction):
-        for p in self.current_location.paths:
+        for p in self.current_location['paths']:
             if p["direction"] == direction:
                 self.current_location = p["destination"]
                 return
@@ -38,28 +30,32 @@ class Player:
 
 DIRECTIONS = ["downstairs", "upstairs", "west", "east"]
 
-living_room = Room(
-    "living room",
-    "You are in the living room. A Wizard is snoring loudly on the couch.",
+living_room = dict(
+    name="living_room", 
+    desc="You are in the living room. A Wizard is snoring loudly on the couch.",
     objs=["whisky", "bucket"],
 )
-attic = Room(
-    "attic",
-    "You are in the attic. There is a gigant welding roch in the corner.",
+
+attic = dict(
+    name="attic",
+    desc="You are in the attic. There is a gigant welding roch in the corner.",
     objs=["frog", "chain"],
 )
-garden = Room(
-    "garden", "You are in a beautiful garden. There is a well in front of you."
+
+garden = dict(
+    name="garden", 
+    desc="You are in a beautiful garden. There is a well in front of you.",
+    objs=[],
 )
 
-living_room.paths = [
+living_room["paths"] = [
     {"destination": attic, "direction": DIRECTIONS[1], "method": "door"},
     {"destination": garden, "direction": DIRECTIONS[2], "method": "ladder"},
 ]
-garden.paths = [
+garden["paths"] = [
     {"destination": living_room, "direction": DIRECTIONS[3], "method": "door"},
 ]
-attic.paths = [
+attic["paths"] = [
     {
         "destination": living_room,
         "direction": DIRECTIONS[0],
