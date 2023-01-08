@@ -31,7 +31,7 @@ class Player:
 DIRECTIONS = ["downstairs", "upstairs", "west", "east"]
 
 living_room = dict(
-    name="living_room", 
+    name="living_room",
     desc="You are in the living room. A Wizard is snoring loudly on the couch.",
     objs=["whisky", "bucket"],
 )
@@ -43,7 +43,7 @@ attic = dict(
 )
 
 garden = dict(
-    name="garden", 
+    name="garden",
     desc="You are in a beautiful garden. There is a well in front of you.",
     objs=[],
 )
@@ -79,6 +79,6 @@ if __name__ == "__main__":
             elif action == "inventory":
                 print(player.inventory())
             else:
-                raise ValueError("I do not know that command")
-        except (IndexError, ValueError) as e:
+                print("I do not know that command")
+        except ValueError as e:
             print(e)
