@@ -18,19 +18,16 @@ class Player:
             raise ValueError("You cannot get that.")
         self.objects.append(obj)
 
-    def inventory(self):
-        print("Items - ")
-        for obj in self.objects:
-            print(obj)
+    def inventory(self) -> str:
+        return f"Items - {'.'.join([obj for obj in self.objects])}"
 
     def look(self):
-        print(self.current_location.desc)
+        res = f"{self.current_location.desc} \n"
         for p in self.current_location.paths:
-            print(
-                f"There is a {p['method']} going {p['direction']} from here."
-            )
+            res = res + f"There is a {p['method']} going {p['direction']} from here. \n"
         for obj in self.current_location.objs:
-            print(f"You see a {obj} on the floor.")
+            res = res + f"You see a {obj} on the floor. \n"
+        return res
 
     def walk(self, direction):
         for p in self.current_location.paths:
@@ -80,11 +77,11 @@ if __name__ == "__main__":
             if action == "walk":
                 player.walk(userInput[1])
             elif action == "look":
-                player.look()
+                print(player.look())
             elif action == "pickup":
                 player.pick_up(userInput[1])
             elif action == "inventory":
-                player.inventory()
+                print(player.inventory())
             else:
                 raise ValueError("I do not know that command")
         except (IndexError, ValueError) as e:
